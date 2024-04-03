@@ -26,8 +26,14 @@ export class CategoriesService {
     });
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return this.categoryRepository.update(id, updateCategoryDto);
+  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+    const result = await this.categoryRepository.update(id, updateCategoryDto);
+    if (result.affected === 0) {
+      return null;
+    }
+    return this.categoryRepository.findOneBy({
+      id,
+    });
   }
 
   remove(id: number) {
