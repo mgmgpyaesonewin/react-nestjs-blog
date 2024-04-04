@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -16,27 +18,51 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto);
+  async create(@Body() createPostDto: CreatePostDto) {
+    try {
+      return this.postsService.create(createPostDto);
+    } catch (error) {
+      throw new HttpException('Failed to create post', HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get()
-  findAll() {
-    return this.postsService.findAll();
+  async findAll() {
+    try {
+      return this.postsService.findAll();
+    } catch (error) {
+      throw new HttpException('Failed to fetch posts', HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.postsService.findOne(+id);
+    const postId = parseInt(id, 10);
+    if (isNaN(postId)) {
+      throw new HttpException('Invalid ID', HttpStatus.BAD_REQUEST);
+    }
+    try {
+      return this.postsService.findOne(+id);
+    } catch (error) {
+      throw new HttpException('Failed to fetch post', HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postsService.update(+id, updatePostDto);
+    try {
+      return this.postsService.update(+id, updatePostDto);
+    } catch (error) {
+      throw new HttpException('Failed to update post', HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.postsService.remove(+id);
+    try {
+      return this.postsService.remove(+id);
+    } catch (error) {
+      throw new HttpException('Failed to delete post', HttpStatus.BAD_REQUEST);
+    }
   }
 }
