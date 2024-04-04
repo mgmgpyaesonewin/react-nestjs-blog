@@ -2,8 +2,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Post } from '../../posts/entities/post.entity';
 
 @Entity()
 export class Category {
@@ -13,9 +15,12 @@ export class Category {
   @Column()
   title: string;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @OneToMany(() => Post, (post) => post.category)
+  posts: Post[];
 
   @CreateDateColumn()
-  updated_at: Date;
+  createdAt: Date;
+
+  @CreateDateColumn()
+  updatedAt: Date;
 }
