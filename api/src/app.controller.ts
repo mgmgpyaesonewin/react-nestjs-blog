@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { RegisterUserDto } from './auth/dto/register-user.dto';
+import { LoginUserDto } from './auth/dto/login-user.dto';
+import { LocalAuthGuard } from './auth/local-auth.guard';
 
 @Controller()
 export class AppController {
@@ -12,10 +21,16 @@ export class AppController {
     return 'Hello World!';
   }
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   @Post('auth/login')
-  async login(@Request() req) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async login(@Request() req, @Body() user: LoginUserDto) {
     return this.authService.login(req.user);
+  }
+
+  @Post('auth/register')
+  async register(@Body() user: RegisterUserDto) {
+    return this.authService.register(user);
   }
 
   @UseGuards(JwtAuthGuard)
