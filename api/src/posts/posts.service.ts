@@ -11,8 +11,12 @@ export class PostsService {
     @InjectRepository(Post)
     private postRepository: Repository<Post>,
   ) {}
-  create(createPostDto: CreatePostDto) {
-    return this.postRepository.save(createPostDto);
+  async create(createPostDto: CreatePostDto, userId: number) {
+    const post = this.postRepository.create({
+      ...createPostDto,
+      user: { id: userId },
+    });
+    return await this.postRepository.save(post);
   }
 
   findAll() {

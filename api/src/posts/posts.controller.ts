@@ -8,24 +8,31 @@ import {
   Delete,
   HttpException,
   HttpStatus,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Body() createPostDto: CreatePostDto) {
+  async create(@Body() createPostDto: CreatePostDto, @Request() req: any) {
     try {
-      return this.postsService.create(createPostDto);
+      console.log(req.user.id);
+      return this.postsService.create(createPostDto, req.user.id);
     } catch (error) {
+      console.log(error);
       throw new HttpException('Failed to create post', HttpStatus.BAD_REQUEST);
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   async findAll() {
     try {
@@ -35,6 +42,7 @@ export class PostsController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     const postId = parseInt(id, 10);
@@ -48,6 +56,7 @@ export class PostsController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     try {
@@ -57,6 +66,7 @@ export class PostsController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     try {
