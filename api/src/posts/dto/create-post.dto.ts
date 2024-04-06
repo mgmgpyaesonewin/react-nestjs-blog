@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty } from 'class-validator';
 import { PostStatus } from '../entities/post-status.enum';
 import { CreateCategoryDto } from '../../categories/dto/create-category.dto';
 
