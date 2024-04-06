@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
@@ -11,8 +11,30 @@ export class PostsService {
     @InjectRepository(Post)
     private postRepository: Repository<Post>,
   ) {}
-  create(createPostDto: CreatePostDto) {
-    return this.postRepository.save(createPostDto);
+  async create(createPostDto: CreatePostDto, userId: number) {
+    const post = this.postRepository.create({
+      ...createPostDto,
+      user: { id: userId },
+    });
+    return await this.postRepository.save(post);
+  }
+
+  async paginate(page?: number, limit?: number) {
+    const [result, total] = await this.postRepository.findAndCount({
+      take: limit,
+      skip: (page - 1) * limit,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    return {
+      data: result,
+      page: page ? +page : 1,
+      totalPage: Math.ceil(total / limit),
+      total,
+      limit: limit ? +limit : 10,
+    };
   }
 
   findAll() {
@@ -25,7 +47,18 @@ export class PostsService {
     });
   }
 
-  async update(id: number, updatePostDto: UpdatePostDto) {
+  async update(id: number, updatePostDto: UpdatePostDto, userId: number) {
+    const postToUpdate = await this.postRepository.findOneBy({
+      id,
+    });
+
+    if (postToUpdate.user.id !== userId) {
+      throw new HttpException(
+        'Only Author can update the post',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
     const result = await this.postRepository.update(id, updatePostDto);
     if (result.affected === 0) {
       return null;
@@ -35,7 +68,12 @@ export class PostsService {
     });
   }
 
-  remove(id: number) {
-    return this.postRepository.delete(id);
+  remove(id: number, userId: number) {
+    return this.postRepository
+      .createQueryBuilder()
+      .delete()
+      .from(Post)
+      .where('id = :id AND userId = :userId', { id, userId })
+      .execute();
   }
 }
