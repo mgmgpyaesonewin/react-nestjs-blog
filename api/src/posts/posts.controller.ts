@@ -10,6 +10,7 @@ import {
   HttpStatus,
   Request,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -34,8 +35,11 @@ export class PostsController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async findAll() {
+  async findAll(@Request() req: any) {
     try {
+      if (req.query.page && req.query.limit) {
+        return this.postsService.paginate(req.query.page, req.query.limit);
+      }
       return this.postsService.findAll();
     } catch (error) {
       throw new HttpException('Failed to fetch posts', HttpStatus.BAD_REQUEST);
@@ -58,9 +62,13 @@ export class PostsController {
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updatePostDto: UpdatePostDto,
+    @Request() req: any,
+  ) {
     try {
-      return this.postsService.update(+id, updatePostDto);
+      return this.postsService.update(+id, updatePostDto, req.user.id);
     } catch (error) {
       throw new HttpException('Failed to update post', HttpStatus.BAD_REQUEST);
     }
@@ -68,9 +76,9 @@ export class PostsController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string, @Request() req: any) {
     try {
-      return this.postsService.remove(+id);
+      return this.postsService.remove(+id, req.user.id);
     } catch (error) {
       throw new HttpException('Failed to delete post', HttpStatus.BAD_REQUEST);
     }
