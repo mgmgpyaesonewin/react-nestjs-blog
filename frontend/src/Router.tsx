@@ -3,7 +3,7 @@ import { LayoutPage } from './pages/Layout.page';
 import { Login } from './pages/Login.page';
 import { HomePage } from './pages/Home.page';
 import { Register } from './pages/Register.page';
-import { PostsPage } from './pages/Posts.page';
+import { PostsPage } from './pages/Posts/Posts.page';
 import { ProtectedRoute } from './ProtectedRoute';
 import { CreatePostPage } from './pages/Posts/CreatePost.page';
 

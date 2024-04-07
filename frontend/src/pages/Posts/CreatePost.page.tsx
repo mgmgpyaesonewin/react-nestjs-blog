@@ -11,15 +11,15 @@ export function CreatePostPage() {
   const form = useForm({
     initialValues: {
       title: '',
-      status: 'DRFAT',
+      status: 'DRAFT',
       category: '',
       content: '',
     },
     validate: {
       title: (value) => value.trim().length < 2,
-      status: (value) => !['DRAFT', 'PUBLISHED'].includes(value),
+      status: (value) => !['DRAFT', 'PUBLISHED'].includes(value) ? 'Invalid status' : null,
       content: (value) => value.trim().length < 10,
-      category: (value) => !value,
+      category: (value) => !value ? 'Category is required' : null,
     },
   });
   const navigate = useNavigate();
