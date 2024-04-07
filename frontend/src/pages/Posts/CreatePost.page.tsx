@@ -1,4 +1,4 @@
-import { TextInput, Textarea, SimpleGrid, Group, Title, Button, Container } from '@mantine/core';
+import { TextInput, SimpleGrid, Group, Title, Button, Container } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { Editor } from '@/components/Editor/Editor';
 
@@ -43,23 +43,16 @@ export function CreatePostPage() {
             label="Category"
             placeholder="Your name"
             name="name"
-            variant="filled"
             {...form.getInputProps('name')}
           />
         </SimpleGrid>
 
-        <Editor />
-        <Textarea
-          mt="md"
-          label="Message"
-          placeholder="Your message"
-          maxRows={10}
-          minRows={5}
-          autosize
-          name="message"
-          variant="filled"
-          {...form.getInputProps('message')}
-        />
+        <SimpleGrid mt="xl">
+          <Editor
+            value={form.values.message}
+            {...form.getInputProps('message')}
+          />
+        </SimpleGrid>
 
         <Group justify="center" mt="xl">
           <Button type="submit" size="md">
