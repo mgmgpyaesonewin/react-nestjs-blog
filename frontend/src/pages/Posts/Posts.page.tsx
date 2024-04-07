@@ -1,13 +1,16 @@
 import { Container, Pagination, SimpleGrid } from '@mantine/core';
 import { Post } from '@/components/Post/Post';
+import { usePosts } from '@/hooks/usePosts';
 
 export function PostsPage() {
+  const { posts } = usePosts();
+
   return (
     <Container py="xl">
       <SimpleGrid cols={{ base: 1, sm: 2 }}>
         {
-          Array.from({ length: 10 }).map((_, index) => (
-            <Post key={index} />
+          posts.map((post) => (
+            <Post key={post.id} post={post} />
           ))
         }
       </SimpleGrid>

@@ -10,9 +10,14 @@ import {
   rem,
 } from '@mantine/core';
 import { IconHeart, IconBookmark, IconShare } from '@tabler/icons-react';
+import day from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import classes from './Post.module.css';
+import PostType from '@/types/PostType';
 
-export function Post() {
+day.extend(relativeTime);
+
+export function Post({ post }: { post: PostType }) {
   const theme = useMantineTheme();
 
   return (
@@ -30,7 +35,7 @@ export function Post() {
       </Badge>
 
       <Text fw={700} className={classes.title} mt="xs">
-        Top 50 underrated plants for house decoration
+        {post.title}
       </Text>
 
       <Group mt="lg">
@@ -41,7 +46,7 @@ export function Post() {
         <div>
           <Text fw={500}>Elsa Gardenowl</Text>
           <Text fz="xs" c="dimmed">
-            posted 34 minutes ago
+            posted {day(post.updatedAt).fromNow()}
           </Text>
         </div>
       </Group>
