@@ -22,7 +22,7 @@ export const usePosts = () => {
 
   useEffect(() => {
     getPosts();
-  }, []);
+  }, [page]);
 
   return {
     getPosts,

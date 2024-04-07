@@ -6,13 +6,12 @@ import { Post } from '@/components/Post/Post';
 import { usePosts } from '@/hooks/usePosts';
 
 export function PostsPage() {
-  const { posts, getPosts, page, setPage, totalPages } = usePosts();
+  const { posts, page, setPage, totalPages } = usePosts();
   const [currentPage, setCurrentPage] = useState(page);
 
   const handlePageChange = (newPage: any) => {
     setCurrentPage(newPage);
     setPage(newPage);
-    getPosts();
   };
 
   return (
