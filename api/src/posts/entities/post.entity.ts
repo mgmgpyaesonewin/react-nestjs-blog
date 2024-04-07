@@ -33,11 +33,11 @@ export class Post {
   })
   status: PostStatus;
 
-  @ManyToOne(() => Category, (category) => category.posts)
+  @ManyToOne(() => Category, (category) => category.posts, { eager: true })
   @JoinColumn({ name: 'categoryId' })
   category: Category;
 
-  @ManyToOne(() => User, (user) => user.posts)
+  @ManyToOne(() => User, (user) => user.posts, { eager: true })
   @JoinColumn({ name: 'userId' })
   user: User;
 

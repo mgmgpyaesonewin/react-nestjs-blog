@@ -14,7 +14,7 @@ export class User extends AppEntity {
   @IsEmail()
   email: string;
 
-  @Column()
+  @Column({ select: false })
   @IsString()
   password: string;
 
