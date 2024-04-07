@@ -4,11 +4,16 @@ import PostType from '@/types/PostType';
 
 export const usePosts = () => {
   const [posts, setPosts] = useState<PostType[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalPosts, setTotalPosts] = useState(0);
 
   const getPosts = async () => {
     try {
-      const response = await fetcher('/posts', 'GET');
-      setPosts(response.data);
+      const response:any = await fetcher(`/posts?page=${page}&limit=20`, 'GET');
+      setPosts(response.data.data);
+      setTotalPages(response.data.totalPage);
+      setTotalPosts(response.data.total);
     } catch (error) {
       console.error(error);
       setPosts([]);
@@ -20,6 +25,11 @@ export const usePosts = () => {
   }, []);
 
   return {
+    getPosts,
     posts,
+    page,
+    setPage,
+    totalPages,
+    totalPosts,
   };
 };

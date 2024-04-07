@@ -8,8 +8,9 @@ import {
   Badge,
   useMantineTheme,
   rem,
+  Flex,
 } from '@mantine/core';
-import { IconHeart, IconBookmark, IconShare } from '@tabler/icons-react';
+import { IconEdit, IconTrash } from '@tabler/icons-react';
 import day from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import classes from './Post.module.css';
@@ -25,18 +26,23 @@ export function Post({ post }: { post: PostType }) {
       <Card.Section mb="sm">
         <Image
           src="https://images.unsplash.com/photo-1477554193778-9562c28588c0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
-          alt="Top 50 underrated plants for house decoration"
+          alt={post.title}
           height={180}
         />
       </Card.Section>
 
-      <Badge w="fit-content" variant="light">
-        decorations
-      </Badge>
-
-      <Text fw={700} className={classes.title} mt="xs">
+      <Text fw={700} className={classes.title}>
         {post.title}
       </Text>
+
+      <Flex mt="xs" gap={5}>
+        <Badge w="fit-content" variant="light">
+          {post.category.title}
+        </Badge>
+        <Badge w="fit-content" variant={post.status === 'PUBLISHED' ? 'filled' : 'light'} color={post.status === 'PUBLISHED' ? 'green' : 'gray'}>
+          {post.status}
+        </Badge>
+      </Flex>
 
       <Group mt="lg">
         <Avatar
@@ -44,7 +50,7 @@ export function Post({ post }: { post: PostType }) {
           radius="sm"
         />
         <div>
-          <Text fw={500}>Elsa Gardenowl</Text>
+          <Text fw={500}>{ post.user.username }</Text>
           <Text fz="xs" c="dimmed">
             posted {day(post.updatedAt).fromNow()}
           </Text>
@@ -52,29 +58,19 @@ export function Post({ post }: { post: PostType }) {
       </Group>
 
       <Card.Section className={classes.footer}>
-        <Group justify="space-between">
-          <Text fz="xs" c="dimmed">
-            733 people liked this
-          </Text>
+        <Group justify="end">
           <Group gap={0}>
             <ActionIcon variant="subtle" color="gray">
-              <IconHeart
-                style={{ width: rem(20), height: rem(20) }}
-                color={theme.colors.red[6]}
-                stroke={1.5}
-              />
-            </ActionIcon>
-            <ActionIcon variant="subtle" color="gray">
-              <IconBookmark
+              <IconEdit
                 style={{ width: rem(20), height: rem(20) }}
                 color={theme.colors.yellow[6]}
                 stroke={1.5}
               />
             </ActionIcon>
             <ActionIcon variant="subtle" color="gray">
-              <IconShare
+              <IconTrash
                 style={{ width: rem(20), height: rem(20) }}
-                color={theme.colors.blue[6]}
+                color={theme.colors.red[6]}
                 stroke={1.5}
               />
             </ActionIcon>
