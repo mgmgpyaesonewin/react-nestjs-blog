@@ -1,25 +1,50 @@
-import { TextInput, SimpleGrid, Group, Title, Button, Container } from '@mantine/core';
+import { TextInput, SimpleGrid, Group, Title, Button, Container, NativeSelect } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
+import { useNavigate } from 'react-router-dom';
 import { Editor } from '@/components/Editor/Editor';
+import { fetcher } from '@/api';
+import { useCategories } from '@/hooks/useCategories';
+import CategoryType from '@/types/CategoryType';
 
 export function CreatePostPage() {
   const form = useForm({
     initialValues: {
-      name: '',
-      email: '',
-      subject: '',
-      message: '',
+      title: '',
+      status: 'DRFAT',
+      category: '',
+      content: '',
     },
     validate: {
-      name: (value) => value.trim().length < 2,
-      email: (value) => !/^\S+@\S+$/.test(value),
-      subject: (value) => value.trim().length === 0,
+      title: (value) => value.trim().length < 2,
+      status: (value) => !['DRAFT', 'PUBLISHED'].includes(value),
+      content: (value) => value.trim().length < 10,
+      category: (value) => !value,
     },
   });
+  const navigate = useNavigate();
+  const { categories } = useCategories();
+
+  const handleSubmit = async (values: {
+      title: string, content: string, status: string, category: string
+    }) => {
+    try {
+      const result = await fetcher('/posts', 'POST', values);
+      if (result.status === 201) {
+        notifications.show({
+          title: 'Post created successfully',
+          message: 'Your post has been created successfully',
+        });
+        navigate('/posts');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Container size={760} my={40}>
-      <form onSubmit={form.onSubmit(() => {})}>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
         <Title
           order={2}
           size="h1"
@@ -31,32 +56,33 @@ export function CreatePostPage() {
         </Title>
 
         <TextInput
-          label="Subject"
-          placeholder="Subject"
+          label="Post Tile"
+          placeholder="Enter your title"
           mt="md"
-          name="subject"
-          {...form.getInputProps('subject')}
+          name="title"
+          {...form.getInputProps('title')}
         />
 
         <SimpleGrid cols={{ base: 1, sm: 2 }} mt="xl">
-          <TextInput
-            label="Category"
-            placeholder="Your name"
-            name="name"
-            {...form.getInputProps('name')}
-          />
+          <NativeSelect
+            label="Post Category"
+            data={categories.map((category: CategoryType) => (
+              { value: category.id, label: category.title }
+            ))}
+            {...form.getInputProps('category')} />
+          <NativeSelect label="Post Status" data={['DRAFT', 'PUBLISHED']} {...form.getInputProps('status')} />
         </SimpleGrid>
 
         <SimpleGrid mt="xl">
           <Editor
-            value={form.values.message}
-            {...form.getInputProps('message')}
+            value={form.values.content}
+            {...form.getInputProps('content')}
           />
         </SimpleGrid>
 
         <Group justify="center" mt="xl">
           <Button type="submit" size="md">
-            Send message
+            Save
           </Button>
         </Group>
       </form>
