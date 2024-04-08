@@ -30,6 +30,12 @@ export class CategoriesController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/trending')
+  findTrending() {
+    return this.categoriesService.findTrending();
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.categoriesService.findOne(+id);

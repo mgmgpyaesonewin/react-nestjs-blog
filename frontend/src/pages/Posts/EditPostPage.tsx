@@ -1,13 +1,15 @@
 import { TextInput, SimpleGrid, Group, Title, Button, Container, NativeSelect } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Editor } from '@/components/Editor/Editor';
 import { fetcher } from '@/api';
 import { useCategories } from '@/hooks/useCategories';
 import CategoryType from '@/types/CategoryType';
 
-export function CreatePostPage() {
+export function EditPostPage() {
+  const [formLoaded, setFormLoaded] = useState(false);
   const form = useForm({
     initialValues: {
       title: '',
@@ -22,18 +24,36 @@ export function CreatePostPage() {
       category: (value) => !value ? 'Category is required' : null,
     },
   });
+
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { categories } = useCategories();
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const { data } = await fetcher(`/posts/${id}`, 'GET');
+        form.setFieldValue('title', data.title);
+        form.setFieldValue('status', data.status);
+        form.setFieldValue('category', data.category.id);
+        form.setFieldValue('content', data.content);
+        setFormLoaded(true);
+      } catch (error) {
+        console.error('Failed to fetch post:', error);
+      }
+    };
+    fetchPost();
+  }, []);
 
   const handleSubmit = async (values: {
       title: string, content: string, status: string, category: string
     }) => {
     try {
-      const result = await fetcher('/posts', 'POST', values);
-      if (result.status === 201) {
+      const result = await fetcher(`/posts/${id}`, 'PATCH', values);
+      if (result.status === 200) {
         notifications.show({
-          title: 'Post created successfully',
-          message: 'Your post has been created successfully',
+          title: 'Post updated successfully',
+          message: 'Your post has been updated successfully',
         });
         navigate(-1);
       }
@@ -41,6 +61,8 @@ export function CreatePostPage() {
       console.error(error);
     }
   };
+
+  if (!formLoaded) return <div>Loading ... </div>;
 
   return (
     <Container size={760} my={40}>
@@ -52,7 +74,7 @@ export function CreatePostPage() {
           fw={900}
           ta="center"
         >
-          Create Your Post
+          Update Your Post
         </Title>
 
         <TextInput

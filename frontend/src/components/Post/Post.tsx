@@ -22,13 +22,21 @@ import { humanizeDate } from '@/helper';
 
 day.extend(relativeTime);
 
-export function Post({ post, handleDelete }: { post: PostType, handleDelete: () => void }) {
+export function Post(
+    { post, handleDelete }:
+    { post: PostType, handleDelete: (event: React.MouseEvent<HTMLButtonElement>) => void }
+  ) {
   const theme = useMantineTheme();
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleClick = () => {
     navigate(`/posts/${post.slug}`);
+  };
+
+  const handleEdit = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    navigate(`/posts/${post.id}/edit`);
   };
 
   return (
@@ -72,7 +80,7 @@ export function Post({ post, handleDelete }: { post: PostType, handleDelete: () 
           {
             post.user.id !== user?.id ? null : (
               <Group gap={0}>
-                <ActionIcon variant="subtle" color="gray">
+                <ActionIcon variant="subtle" color="gray" onClick={handleEdit}>
                   <IconEdit
                     style={{ width: rem(20), height: rem(20) }}
                     color={theme.colors.yellow[6]}

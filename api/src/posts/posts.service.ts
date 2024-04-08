@@ -72,6 +72,12 @@ export class PostsService {
     });
   }
 
+  findOneById(id: number) {
+    return this.postRepository.findOneBy({
+      id,
+    });
+  }
+
   async update(id: number, updatePostDto: UpdatePostDto, userId: number) {
     const postToUpdate = await this.postRepository.findOneBy({
       id,

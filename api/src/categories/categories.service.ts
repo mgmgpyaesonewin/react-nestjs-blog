@@ -21,9 +21,12 @@ export class CategoriesService {
   }
 
   findOne(id: number) {
-    return this.categoryRepository.findOneBy({
-      id,
-    });
+    return this.categoryRepository
+      .createQueryBuilder('category')
+      .leftJoinAndSelect('category.posts', 'posts')
+      .leftJoinAndSelect('posts.user', 'user')
+      .where('category.id = :id', { id })
+      .getOne();
   }
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
@@ -38,5 +41,16 @@ export class CategoriesService {
 
   remove(id: number) {
     return this.categoryRepository.delete(id);
+  }
+
+  findTrending() {
+    return this.categoryRepository
+      .createQueryBuilder('category')
+      .leftJoinAndSelect('category.posts', 'posts')
+      .select('category.*, COUNT(posts.id) as postCount')
+      .groupBy('category.id')
+      .orderBy('postCount', 'DESC')
+      .take(10)
+      .getRawMany();
   }
 }

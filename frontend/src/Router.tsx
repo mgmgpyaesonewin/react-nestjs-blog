@@ -8,6 +8,7 @@ import { ProtectedRoute } from './ProtectedRoute';
 import { CreatePostPage } from './pages/Posts/CreatePost.page';
 import { MyPostsPage } from './pages/Posts/MyPosts.page';
 import PostDetail from './pages/Posts/PostDetail.page';
+import { EditPostPage } from './pages/Posts/EditPostPage';
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
           {
             path: 'posts/:slug',
             element: <PostDetail />,
+          },
+          {
+            path: 'posts/:id/edit',
+            element: <EditPostPage />,
           },
         ],
       },

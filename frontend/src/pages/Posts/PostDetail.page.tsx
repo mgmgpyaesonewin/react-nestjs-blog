@@ -14,7 +14,7 @@ export default function PostDetail() {
     // Get Slug from URL
     const fetchPost = async () => {
       try {
-        const { data } = await fetcher(`/posts/${slug}`, 'GET');
+        const { data } = await fetcher(`/posts/slug/${slug}`, 'GET');
         setPost(data);
       } catch (error) {
         console.error('Failed to fetch post:', error);

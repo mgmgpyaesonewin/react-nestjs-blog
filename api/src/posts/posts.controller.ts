@@ -49,17 +49,31 @@ export class PostsController {
   @Get('own')
   async findOwn(@Request() req: any) {
     try {
-      return this.postsService.paginateOwn(req.query.page, req.query.limit, req.user.id);
+      return this.postsService.paginateOwn(
+        req.query.page,
+        req.query.limit,
+        req.user.id,
+      );
     } catch (error) {
       throw new HttpException('Failed to fetch posts', HttpStatus.BAD_REQUEST);
     }
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get(':slug')
+  @Get('/slug/:slug')
   findOne(@Param('slug') slug: string) {
     try {
       return this.postsService.findOne(slug);
+    } catch (error) {
+      throw new HttpException('Failed to fetch post', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  findById(@Param('id') id: string) {
+    try {
+      return this.postsService.findOneById(+id);
     } catch (error) {
       throw new HttpException('Failed to fetch post', HttpStatus.BAD_REQUEST);
     }

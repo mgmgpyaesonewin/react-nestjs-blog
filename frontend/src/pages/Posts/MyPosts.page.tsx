@@ -24,7 +24,13 @@ export function MyPostsPage() {
       <SimpleGrid cols={{ base: 1, sm: 2 }}>
         {
           posts.map((post) => (
-            <Post key={post.id} post={post} handleDelete={() => deletePost(+post.id)} />
+            <Post
+              key={post.id}
+              post={post}
+              handleDelete={(event: React.MouseEvent<HTMLButtonElement>) => {
+              event.stopPropagation();
+              deletePost(+post.id);
+            }} />
           ))
         }
       </SimpleGrid>
