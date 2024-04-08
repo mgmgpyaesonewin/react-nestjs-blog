@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { fetcher } from '@/api';
 import PostType from '@/types/PostType';
 
-export const usePosts = () => {
+export const usePosts = (isMyPosts = false) => {
   const [posts, setPosts] = useState<PostType[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -10,7 +10,8 @@ export const usePosts = () => {
 
   const getPosts = async () => {
     try {
-      const response:any = await fetcher(`/posts?page=${page}&limit=20`, 'GET');
+      const url = isMyPosts ? `/posts/own?page=${page}&limit=20` : `/posts?page=${page}&limit=20`;
+      const response:any = await fetcher(url, 'GET');
       setPosts(response.data.data);
       setTotalPages(response.data.totalPage);
       setTotalPosts(response.data.total);

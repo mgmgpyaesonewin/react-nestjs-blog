@@ -1,16 +1,20 @@
 import { useState } from 'react';
 import {
-  IconBellRinging,
+  IconArticle,
+  IconEdit,
   IconLogout,
 } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 import classes from './Navbar.module.css';
 
 const data = [
-  { link: '', label: 'Activity', icon: IconBellRinging },
+  { link: '/posts', label: 'Activity', icon: IconArticle },
+  { link: '/posts/my', label: 'My Posts', icon: IconEdit },
 ];
 
 export function Navbar() {
   const [active, setActive] = useState('Billing');
+  const navigate = useNavigate();
 
   const links = data.map((item) => (
     <a
@@ -21,6 +25,7 @@ export function Navbar() {
       onClick={(event) => {
         event.preventDefault();
         setActive(item.label);
+        navigate(item.link);
       }}
     >
       <item.icon className={classes.linkIcon} stroke={1.5} />

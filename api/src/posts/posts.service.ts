@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { PostStatus } from './entities/post-status.enum';
 
 @Injectable()
 export class PostsService {
@@ -21,6 +22,9 @@ export class PostsService {
 
   async paginate(page?: number, limit?: number) {
     const [result, total] = await this.postRepository.findAndCount({
+      where: {
+        status: PostStatus.PUBLISHED,
+      },
       take: limit,
       skip: (page - 1) * limit,
       order: {
@@ -39,6 +43,27 @@ export class PostsService {
 
   findAll() {
     return this.postRepository.find();
+  }
+
+  async paginateOwn(page?: number, limit?: number, userId?: number) {
+    const [result, total] = await this.postRepository.findAndCount({
+      where: {
+        user: { id: userId },
+      },
+      take: limit,
+      skip: (page - 1) * limit,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    return {
+      data: result,
+      page: page ? +page : 1,
+      totalPage: Math.ceil(total / limit),
+      total,
+      limit: limit ? +limit : 10,
+    };
   }
 
   findOne(id: number) {

@@ -2,21 +2,31 @@ import axios from 'axios';
 
 const baseURL = 'http://localhost:3000';
 
-const setAuthHeader = () => {
+const axiosInstance = axios.create({
+  baseURL,
+});
+
+axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
-    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`;
   }
-};
+  return config;
+});
 
-export const fetcher = async (url: string, method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE', data?: any) => {
-  setAuthHeader();
-  return axios({
+axiosInstance.interceptors.response.use((response) => response, (error) => {
+  if (error.response.status === 401) {
+    localStorage.removeItem('token');
+    window.location.href = '/login';
+  }
+  return Promise.reject(error);
+});
+
+export const fetcher = async (url: string, method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE', data?: any) => axiosInstance({
     method,
     url: baseURL + url,
     data,
   });
-};
 
 export const login = async (email: string, password: string) => {
   const response = await fetcher('/auth/login', 'POST', { email, password });

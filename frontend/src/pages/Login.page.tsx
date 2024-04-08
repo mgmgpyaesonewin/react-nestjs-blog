@@ -27,7 +27,7 @@ export function Login() {
     },
   });
   const navigate = useNavigate();
-  const { updateAuth } = useContext(AuthContext);
+  const { updateAuth, setUser } = useContext(AuthContext);
 
   const handleSubmit = async (values: { email: string; password: string }) => {
     try {
@@ -38,6 +38,8 @@ export function Login() {
           message: 'Welcome back!',
         });
         updateAuth(true);
+        setUser(result.data.user);
+        localStorage.setItem('user', JSON.stringify(result.data.user));
         navigate('/posts');
       }
     } catch (error) {

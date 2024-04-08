@@ -1,16 +1,13 @@
-import { MantineProvider, AppShell, Group, Burger, UnstyledButton, Button } from '@mantine/core';
-import { Link, Outlet } from 'react-router-dom';
+import { MantineProvider, AppShell, Group, Burger, UnstyledButton } from '@mantine/core';
+import { Outlet } from 'react-router-dom';
 import { useDisclosure } from '@mantine/hooks';
-import { useContext } from 'react';
 import { theme } from '@/theme';
 import classes from './Layout.module.css';
-import { AuthContext } from '@/context/AuthContext';
 import { Navbar } from '@/components/Navbar/Navbar';
 
 export function LayoutPage() {
   const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
-  const { isAuthenticated } = useContext(AuthContext);
 
   return (
     <MantineProvider theme={theme}>

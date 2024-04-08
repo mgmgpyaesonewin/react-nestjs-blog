@@ -6,6 +6,7 @@ import { Register } from './pages/Register.page';
 import { PostsPage } from './pages/Posts/Posts.page';
 import { ProtectedRoute } from './ProtectedRoute';
 import { CreatePostPage } from './pages/Posts/CreatePost.page';
+import { MyPostsPage } from './pages/Posts/MyPosts.page';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           { path: 'posts', element: <PostsPage /> },
+          {
+            path: 'posts/my',
+            element: <MyPostsPage />,
+          },
           {
             path: 'posts/create',
             element: <CreatePostPage />,

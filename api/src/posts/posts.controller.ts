@@ -47,6 +47,16 @@ export class PostsController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('own')
+  async findOwn(@Request() req: any) {
+    try {
+      return this.postsService.paginateOwn(req.query.page, req.query.limit, req.user.id);
+    } catch (error) {
+      throw new HttpException('Failed to fetch posts', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     const postId = parseInt(id, 10);

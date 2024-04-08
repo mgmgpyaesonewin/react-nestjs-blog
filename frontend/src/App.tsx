@@ -10,10 +10,11 @@ import { AuthContext } from './context/AuthContext';
 
 export default function App() {
   const [isAuthenticated, updateAuth] = useState(() => !!localStorage.getItem('token'));
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user') || '{}'));
 
   return (
     <MantineProvider theme={theme}>
-      <AuthContext.Provider value={{ isAuthenticated, updateAuth }}>
+      <AuthContext.Provider value={{ isAuthenticated, updateAuth, user, setUser }}>
         <Notifications />
         <Router />
       </AuthContext.Provider>
