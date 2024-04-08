@@ -6,7 +6,7 @@ import { Post } from '@/components/Post/Post';
 import { usePosts } from '@/hooks/usePosts';
 
 export function MyPostsPage() {
-  const { posts, page, setPage, totalPages } = usePosts(true);
+  const { posts, page, setPage, totalPages, deletePost } = usePosts(true);
   const [currentPage, setCurrentPage] = useState(page);
 
   const handlePageChange = (newPage: any) => {
@@ -24,7 +24,7 @@ export function MyPostsPage() {
       <SimpleGrid cols={{ base: 1, sm: 2 }}>
         {
           posts.map((post) => (
-            <Post key={post.id} post={post} />
+            <Post key={post.id} post={post} handleDelete={() => deletePost(+post.id)} />
           ))
         }
       </SimpleGrid>

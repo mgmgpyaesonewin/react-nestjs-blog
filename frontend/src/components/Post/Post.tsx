@@ -10,19 +10,29 @@ import {
   rem,
   Flex,
 } from '@mantine/core';
+import { useContext } from 'react';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 import day from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import classes from './Post.module.css';
 import PostType from '@/types/PostType';
+import { AuthContext } from '@/context/AuthContext';
+import { humanizeDate } from '@/helper';
 
 day.extend(relativeTime);
 
-export function Post({ post }: { post: PostType }) {
+export function Post({ post, handleDelete }: { post: PostType, handleDelete: () => void }) {
   const theme = useMantineTheme();
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/posts/${post.slug}`);
+  };
 
   return (
-    <Card withBorder padding="lg" radius="md" className={classes.card}>
+    <Card withBorder padding="lg" radius="md" className={classes.card} onClick={handleClick}>
       <Card.Section mb="sm">
         <Image
           src="https://images.unsplash.com/photo-1477554193778-9562c28588c0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
@@ -52,29 +62,33 @@ export function Post({ post }: { post: PostType }) {
         <div>
           <Text fw={500}>{ post.user.username }</Text>
           <Text fz="xs" c="dimmed">
-            posted {day(post.updatedAt).fromNow()}
+            posted {humanizeDate(post.createdAt)}
           </Text>
         </div>
       </Group>
 
       <Card.Section className={classes.footer}>
         <Group justify="end">
-          <Group gap={0}>
-            <ActionIcon variant="subtle" color="gray">
-              <IconEdit
-                style={{ width: rem(20), height: rem(20) }}
-                color={theme.colors.yellow[6]}
-                stroke={1.5}
-              />
-            </ActionIcon>
-            <ActionIcon variant="subtle" color="gray">
-              <IconTrash
-                style={{ width: rem(20), height: rem(20) }}
-                color={theme.colors.red[6]}
-                stroke={1.5}
-              />
-            </ActionIcon>
-          </Group>
+          {
+            post.user.id !== user?.id ? null : (
+              <Group gap={0}>
+                <ActionIcon variant="subtle" color="gray">
+                  <IconEdit
+                    style={{ width: rem(20), height: rem(20) }}
+                    color={theme.colors.yellow[6]}
+                    stroke={1.5}
+                  />
+                </ActionIcon>
+                <ActionIcon variant="subtle" color="gray" onClick={handleDelete}>
+                  <IconTrash
+                    style={{ width: rem(20), height: rem(20) }}
+                    color={theme.colors.red[6]}
+                    stroke={1.5}
+                  />
+                </ActionIcon>
+              </Group>
+            )
+          }
         </Group>
       </Card.Section>
     </Card>

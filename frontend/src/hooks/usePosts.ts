@@ -21,12 +21,22 @@ export const usePosts = (isMyPosts = false) => {
     }
   };
 
+  const deletePost = async (id: number) => {
+    try {
+      await fetcher(`/posts/${id}`, 'DELETE');
+      getPosts();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     getPosts();
   }, [page]);
 
   return {
     getPosts,
+    deletePost,
     posts,
     page,
     setPage,

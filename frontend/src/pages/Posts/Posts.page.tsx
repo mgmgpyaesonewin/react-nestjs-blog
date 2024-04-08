@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import { Anchor, Button, Container, Flex, Pagination, SimpleGrid } from '@mantine/core';
-import { IconTablePlus } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
+import { Container, Flex, Pagination, SimpleGrid } from '@mantine/core';
 import { Post } from '@/components/Post/Post';
 import { usePosts } from '@/hooks/usePosts';
 
 export function PostsPage() {
-  const { posts, page, setPage, totalPages } = usePosts();
+  const { posts, page, setPage, totalPages, deletePost } = usePosts();
   const [currentPage, setCurrentPage] = useState(page);
 
   const handlePageChange = (newPage: any) => {
@@ -16,15 +14,10 @@ export function PostsPage() {
 
   return (
     <Container py="xl">
-      <Flex justify="end">
-        <Anchor size="sm" component={Link} to="/posts/create">
-          <Button variant="filled" my="sm" leftSection={<IconTablePlus size={14} />}>Create</Button>
-        </Anchor>
-      </Flex>
       <SimpleGrid cols={{ base: 1, sm: 2 }}>
         {
           posts.map((post) => (
-            <Post key={post.id} post={post} />
+            <Post key={post.id} post={post} handleDelete={() => deletePost(+post.id)} />
           ))
         }
       </SimpleGrid>

@@ -10,7 +10,6 @@ import {
   HttpStatus,
   Request,
   UseGuards,
-  Query,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -57,14 +56,10 @@ export class PostsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    const postId = parseInt(id, 10);
-    if (isNaN(postId)) {
-      throw new HttpException('Invalid ID', HttpStatus.BAD_REQUEST);
-    }
+  @Get(':slug')
+  findOne(@Param('slug') slug: string) {
     try {
-      return this.postsService.findOne(+id);
+      return this.postsService.findOne(slug);
     } catch (error) {
       throw new HttpException('Failed to fetch post', HttpStatus.BAD_REQUEST);
     }

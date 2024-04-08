@@ -66,9 +66,9 @@ export class PostsService {
     };
   }
 
-  findOne(id: number) {
+  findOne(slug: string) {
     return this.postRepository.findOneBy({
-      id,
+      slug,
     });
   }
 

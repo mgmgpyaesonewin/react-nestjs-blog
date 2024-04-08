@@ -17,10 +17,10 @@ export class Post {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   title: string;
 
-  @Column()
+  @Column({ unique: true })
   slug: string;
 
   @Column('longtext')

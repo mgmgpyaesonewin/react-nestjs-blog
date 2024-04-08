@@ -3,6 +3,7 @@ import UserType from './UserType';
 
 interface PostType {
   id: string;
+  slug: string;
   title: string;
   content: string;
   status: string;

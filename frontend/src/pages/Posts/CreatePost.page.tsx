@@ -35,7 +35,7 @@ export function CreatePostPage() {
           title: 'Post created successfully',
           message: 'Your post has been created successfully',
         });
-        navigate('/posts');
+        navigate('/posts/my');
       }
     } catch (error) {
       console.error(error);
