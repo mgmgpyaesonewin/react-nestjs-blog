@@ -34,8 +34,8 @@ export class CategoriesService {
       .createQueryBuilder('category')
       .leftJoinAndSelect('category.posts', 'posts')
       .leftJoinAndSelect('posts.user', 'user')
-      .where('category.id = :id', { id })
       .where('posts.status = :published', { published: 'PUBLISHED' })
+      .andWhere('category.id = :id', { id })
       .getOne();
   }
 

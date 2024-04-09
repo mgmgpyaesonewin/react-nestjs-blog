@@ -1,13 +1,17 @@
+import { useContext } from 'react';
 import { MantineProvider, AppShell, Group, Burger, UnstyledButton } from '@mantine/core';
 import { Outlet } from 'react-router-dom';
 import { useDisclosure } from '@mantine/hooks';
 import { theme } from '@/theme';
 import classes from './Layout.module.css';
 import { Navbar } from '@/components/Navbar/Navbar';
+import { AuthContext } from '@/context/AuthContext';
+import { UnauthorizeNavbar } from '@/components/Navbar/UnauthorizeNavbar';
 
 export function LayoutPage() {
   const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
+  const { isAuthenticated } = useContext(AuthContext);
 
   return (
     <MantineProvider theme={theme}>
@@ -25,7 +29,9 @@ export function LayoutPage() {
       </AppShell.Header>
 
       <AppShell.Navbar py="md" px={4}>
-        <Navbar />
+        {
+          isAuthenticated ? <Navbar /> : <UnauthorizeNavbar />
+        }
       </AppShell.Navbar>
 
       <AppShell.Main>

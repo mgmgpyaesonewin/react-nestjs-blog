@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { TinyEmitter } from 'tiny-emitter';
 import {
   IconArticle,
   IconCircleFilled,
@@ -13,7 +14,7 @@ import { useCategories } from '@/hooks/useCategories';
 import { TrendingCategoryType } from '@/types/CategoryType';
 
 export function Navbar() {
-  const { categories: trendingCategories, isLoading } = useCategories('/categories/trending');
+  const { categories: trendingCategories, isLoading, setIsLoading, fetchCategories } = useCategories('/categories/trending');
   const [active, setActive] = useState('Activity');
   const [data, setData] = useState([
     { link: '/posts', label: 'Activity', icon: IconTimeline, withCount: 0 },

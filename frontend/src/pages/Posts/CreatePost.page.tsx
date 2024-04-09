@@ -1,3 +1,4 @@
+import { TinyEmitter } from 'tiny-emitter';
 import { TextInput, SimpleGrid, Group, Title, Button, Container, NativeSelect } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
@@ -5,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Editor } from '@/components/Editor/Editor';
 import { fetcher } from '@/api';
 import { useCategories } from '@/hooks/useCategories';
-import CategoryType from '@/types/CategoryType';
+import { CategoryType } from '@/types/CategoryType';
 
 export function CreatePostPage() {
   const form = useForm({

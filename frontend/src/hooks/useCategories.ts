@@ -20,7 +20,9 @@ export const useCategories = (url = '/categories') => {
   }, []);
 
   return {
+    fetchCategories,
     categories,
     isLoading,
+    setIsLoading,
   };
 };
