@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { TinyEmitter } from 'tiny-emitter';
 import {
   IconArticle,
@@ -12,6 +12,7 @@ import { Badge, ScrollArea } from '@mantine/core';
 import classes from './Navbar.module.css';
 import { useCategories } from '@/hooks/useCategories';
 import { TrendingCategoryType } from '@/types/CategoryType';
+import { AuthContext } from '@/context/AuthContext';
 
 export function Navbar() {
   const { categories: trendingCategories, isLoading, setIsLoading, fetchCategories } = useCategories('/categories/trending');
@@ -23,6 +24,7 @@ export function Navbar() {
   ]);
 
   const navigate = useNavigate();
+  const { updateAuth } = useContext(AuthContext);
 
   useEffect(() => {
     if (trendingCategories.length > 0) {
@@ -69,7 +71,15 @@ export function Navbar() {
       </div>
 
       <div className={classes.footer}>
-        <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
+        <a
+          href="#"
+          className={classes.link}
+          onClick={(event) => {
+          event.preventDefault();
+          localStorage.removeItem('token');
+          updateAuth(false);
+          navigate('/login');
+        }}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />
           <span>Logout</span>
         </a>
