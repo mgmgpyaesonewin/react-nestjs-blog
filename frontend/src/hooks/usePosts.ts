@@ -3,6 +3,7 @@ import { fetcher } from '@/api';
 import PostType from '@/types/PostType';
 
 export const usePosts = (isMyPosts = false) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [posts, setPosts] = useState<PostType[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -15,6 +16,7 @@ export const usePosts = (isMyPosts = false) => {
       setPosts(response.data.data);
       setTotalPages(response.data.totalPage);
       setTotalPosts(response.data.total);
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
       setPosts([]);
@@ -35,6 +37,7 @@ export const usePosts = (isMyPosts = false) => {
   }, [page]);
 
   return {
+    isLoading,
     getPosts,
     deletePost,
     posts,

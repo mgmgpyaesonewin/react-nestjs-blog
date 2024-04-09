@@ -24,7 +24,10 @@ day.extend(relativeTime);
 
 export function Post(
     { post, handleDelete }:
-    { post: PostType, handleDelete: (event: React.MouseEvent<HTMLButtonElement>) => void }
+    {
+      post: PostType,
+      handleDelete: (event: React.MouseEvent<HTMLButtonElement>) => void
+    }
   ) {
   const theme = useMantineTheme();
   const { user } = useContext(AuthContext);

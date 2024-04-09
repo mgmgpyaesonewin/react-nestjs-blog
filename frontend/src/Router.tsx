@@ -9,6 +9,7 @@ import { CreatePostPage } from './pages/Posts/CreatePost.page';
 import { MyPostsPage } from './pages/Posts/MyPosts.page';
 import PostDetail from './pages/Posts/PostDetail.page';
 import { EditPostPage } from './pages/Posts/EditPostPage';
+import { PostsByAllCategoriesPage } from './pages/Posts/PostsByAllCategories.page';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,14 @@ const router = createBrowserRouter([
           {
             path: 'posts/:id/edit',
             element: <EditPostPage />,
+          },
+          {
+            path: 'categories',
+            element: <PostsByAllCategoriesPage />,
+          },
+          {
+            path: 'categories/:id',
+            element: <div>Category</div>,
           },
         ],
       },

@@ -1,5 +1,5 @@
-import CategoryType from './CategoryType';
-import UserType from './UserType';
+import type { CategoryType } from './CategoryType';
+import type UserType from './UserType';
 
 interface PostType {
   id: string;

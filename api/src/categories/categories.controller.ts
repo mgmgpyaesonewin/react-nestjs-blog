@@ -36,6 +36,12 @@ export class CategoriesController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/all')
+  findAllWithPosts() {
+    return this.categoriesService.findAllWithPosts();
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.categoriesService.findOne(+id);

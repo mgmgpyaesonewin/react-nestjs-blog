@@ -6,7 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Editor } from '@/components/Editor/Editor';
 import { fetcher } from '@/api';
 import { useCategories } from '@/hooks/useCategories';
-import CategoryType from '@/types/CategoryType';
+import { CategoryType } from '@/types/CategoryType';
 
 export function EditPostPage() {
   const [formLoaded, setFormLoaded] = useState(false);
