@@ -20,6 +20,13 @@ export class CategoriesService {
     return this.categoryRepository.find();
   }
 
+  findAllWithPosts() {
+    return this.categoryRepository
+      .createQueryBuilder('category')
+      .leftJoinAndSelect('category.posts', 'posts')
+      .getMany();
+  }
+
   findOne(id: number) {
     return this.categoryRepository
       .createQueryBuilder('category')
@@ -50,7 +57,7 @@ export class CategoriesService {
       .select('category.*, COUNT(posts.id) as postCount')
       .groupBy('category.id')
       .orderBy('postCount', 'DESC')
-      .take(10)
+      .limit(10)
       .getRawMany();
   }
 }
