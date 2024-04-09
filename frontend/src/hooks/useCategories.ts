@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { fetcher } from '@/api';
 
-export const useCategories = () => {
+export const useCategories = (url = '/categories') => {
   const [categories, setCategories] = useState([]);
+  const [isLoading, setIslLoading] = useState(true);
 
   const fetchCategories = async () => {
     try {
-      const response = await fetcher('/categories', 'GET');
+      const response = await fetcher(url, 'GET');
       setCategories(response.data);
+      setIslLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -19,5 +21,6 @@ export const useCategories = () => {
 
   return {
     categories,
+    isLoading,
   };
 };
