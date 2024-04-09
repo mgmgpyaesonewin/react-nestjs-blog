@@ -25,6 +25,7 @@ export class CategoriesService {
       .createQueryBuilder('category')
       .leftJoinAndSelect('category.posts', 'posts')
       .leftJoinAndSelect('posts.user', 'user')
+      .where('posts.status = :published', { published: 'PUBLISHED' })
       .getMany();
   }
 
@@ -34,6 +35,7 @@ export class CategoriesService {
       .leftJoinAndSelect('category.posts', 'posts')
       .leftJoinAndSelect('posts.user', 'user')
       .where('category.id = :id', { id })
+      .where('posts.status = :published', { published: 'PUBLISHED' })
       .getOne();
   }
 
@@ -55,6 +57,7 @@ export class CategoriesService {
     return this.categoryRepository
       .createQueryBuilder('category')
       .leftJoinAndSelect('category.posts', 'posts')
+      .where('posts.status = :published', { published: 'PUBLISHED' })
       .select('category.*, COUNT(posts.id) as postCount')
       .groupBy('category.id')
       .orderBy('postCount', 'DESC')
