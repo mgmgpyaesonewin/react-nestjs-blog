@@ -20,6 +20,14 @@ export class CategoriesService {
     return this.categoryRepository.find();
   }
 
+  findAllWithPosts() {
+    return this.categoryRepository
+      .createQueryBuilder('category')
+      .leftJoinAndSelect('category.posts', 'posts')
+      .leftJoinAndSelect('posts.user', 'user')
+      .getMany();
+  }
+
   findOne(id: number) {
     return this.categoryRepository
       .createQueryBuilder('category')

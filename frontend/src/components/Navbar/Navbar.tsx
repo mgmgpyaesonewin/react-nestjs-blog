@@ -25,8 +25,8 @@ export function Navbar() {
 
   useEffect(() => {
     if (trendingCategories.length > 0) {
-      setData([
-        ...data,
+      setData(prevData => [
+        ...prevData,
         ...trendingCategories.map((category: TrendingCategoryType) => ({
           link: `/categories/${category.id}`,
           label: category.title,

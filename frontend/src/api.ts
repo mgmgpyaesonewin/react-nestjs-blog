@@ -15,9 +15,13 @@ axiosInstance.interceptors.request.use((config) => {
 });
 
 axiosInstance.interceptors.response.use((response) => response, (error) => {
-  if (error.response.status === 401) {
-    localStorage.removeItem('token');
-    window.location.href = '/login';
+  try {
+    if (error.response.status === 401) {
+      localStorage.removeItem('token');
+      window.location.href = '/login';
+    }
+  } catch (err) {
+    console.error(err);
   }
   return Promise.reject(error);
 });
